@@ -1,4 +1,3 @@
-
 /*
  Forked from feathers-memory/src/index.js
  */

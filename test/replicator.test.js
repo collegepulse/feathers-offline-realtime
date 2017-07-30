@@ -1,4 +1,3 @@
-
 import test from './commons/helpers/replicator.test.js';
 
 const Realtime = require('../src');

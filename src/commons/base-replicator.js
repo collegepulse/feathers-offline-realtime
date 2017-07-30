@@ -1,7 +1,5 @@
-
 import snapshot from 'feathers-offline-snapshot';
 import { genUuid } from './utils';
-
 import makeDebug from 'debug';
 
 const debug = makeDebug('base-replicator');

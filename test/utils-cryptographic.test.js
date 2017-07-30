@@ -1,4 +1,3 @@
-
 const assert = require('chai').assert;
 const { hash, hashOfRecord, genUuid } = require('../src/commons/utils');
 
@@ -7,9 +6,6 @@ describe('utils-cryptographic:', () => {
     const str = JSON.stringify({ a: 'a', b: true });
     const hash1 = hash(str);
     const hash2 = hash(str);
-
-    console.log(hash1);
-    console.log(hash2);
 
     assert.isString(hash1);
     assert.lengthOf(hash1, 32);

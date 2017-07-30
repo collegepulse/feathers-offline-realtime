@@ -1,6 +1,4 @@
-
 import EventEmitter from 'component-emitter';
-
 import makeDebug from 'debug';
 
 const debug = makeDebug('base-engine');

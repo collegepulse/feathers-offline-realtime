@@ -1,4 +1,3 @@
-
 const assert = require('chai').assert;
 const { isObject, stripProps } = require('../src/commons/utils');
 

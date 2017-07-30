@@ -1,4 +1,3 @@
-
 const assert = require('chai').assert;
 const feathers = require('feathers');
 const memory = require('feathers-memory');

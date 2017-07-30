@@ -29,7 +29,7 @@
     "changelog": "github_changelog_generator && git add CHANGELOG.md && git commit -am \"Updating changelog\"",
     "compile": "shx rm -rf lib/ && babel -d lib/ src/",
     "watch": "babel --watch -d lib/ src/",
-    "lint": "eslint src/**/*.js test/**/*.js --fix",
+    "lint": "eslint src/**/*.js test/**/*.js",
     "mocha": "mocha --opts mocha.opts",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "coverage:open": "open ./coverage/index.html",
@@ -72,7 +72,6 @@
     "istanbul": "^1.1.0-alpha.1",
     "mocha": "^3.4.2",
     "nyc": "^11.1.0",
-    "semistandard": "^11.0.0",
     "shx": "^0.2.2"
   }
 }
