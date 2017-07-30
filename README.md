@@ -13,7 +13,7 @@ npm install feathers-offline-realtime-immutable --save
 
 ## Usage
 
-```
+```javascript
 const Realtime = require('feathers-offline-realtime-immutable');
 const feathersClient = feathers()...;
 const messages = feathersClient.service('/messages');
