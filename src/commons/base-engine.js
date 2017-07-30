@@ -1,7 +1,10 @@
 import EventEmitter from 'component-emitter';
 import makeDebug from 'debug';
+import { removeAt, addLast, merge, replaceAt } from 'timm';
 
 const debug = makeDebug('base-engine');
+
+const snapshot = { action: 'snapshot' };
 
 export default class BaseEngine {
   constructor(service, options = {}) {
@@ -38,7 +41,7 @@ export default class BaseEngine {
   snapshot(records) {
     debug('snapshot entered');
 
-    this.store.last = { action: 'snapshot' };
+    this.store.last = snapshot;
     this.store.records = records;
 
     if (this._sorter) {
@@ -87,13 +90,11 @@ export default class BaseEngine {
     const that = this;
 
     const idName = this._useUuid ? 'uuid' : ('id' in remoteRecord ? 'id' : '_id');
-    const store = this.store;
-    const records = store.records;
+    const cantOrShouldNotPublish = this._publication && !this._publication(remoteRecord);
+    const index = this._findIndex(this.store.records, record => record[idName] === remoteRecord[idName]);
 
-    const index = this._findIndex(records, record => record[idName] === remoteRecord[idName]);
-
-    if (index >= 0) {
-      records.splice(index, 1);
+    if ((index >= 0 && eventName === 'removed') || cantOrShouldNotPublish) {
+      this.store.records = removeAt(this.store.records, index);
     }
 
     if (eventName === 'removed') {
@@ -107,24 +108,29 @@ export default class BaseEngine {
       return; // index >= 0 ? broadcast('remove') : undefined;
     }
 
-    if (this._publication && !this._publication(remoteRecord)) {
+    if (cantOrShouldNotPublish) {
       return index >= 0 ? broadcast('left-pub') : undefined;
     }
 
-    records[records.length] = remoteRecord;
+    if (index === -1) {
+      this.store.records = addLast(this.store.records, remoteRecord);
+    } else {
+      const updatedRecord = merge(this.store.records[index], remoteRecord);
+      this.store.records = replaceAt(this.store.records, index, updatedRecord);
+    }
 
     if (this._sorter) {
-      records.sort(this._sorter);
+      this.store.records.sort(this._sorter);
     }
 
     return broadcast('mutated');
 
     function broadcast(action) {
       debug(`emitted ${index} ${eventName} ${action}`);
-      store.last = { source, action, eventName, record: remoteRecord };
+      that.store.last = { source, action, eventName, record: remoteRecord };
 
-      that.emit('events', records, store.last);
-      that._subscriber(records, store.last);
+      that.emit('events', that.store.records, that.store.last);
+      that._subscriber(that.store.records, that.store.last);
     }
   }
 
