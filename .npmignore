@@ -1,9 +1,10 @@
+.nyc_output
 .editorconfig
 .jshintrc
 .travis.yml
-.istanbul.yml
 .babelrc
 .idea/
+coverage/
 src/
 test/
 !lib/
