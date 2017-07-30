@@ -1,7 +1,7 @@
 {
   "name": "feathers-offline-realtime-immutable",
   "description": "Offline-first realtime replication with optimistic updates.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/collegepulse/feathers-offline-realtime-immutable",
   "main": "lib/",
   "keywords": [
