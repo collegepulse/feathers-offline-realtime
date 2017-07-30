@@ -2,10 +2,11 @@
 import EventEmitter from 'component-emitter';
 
 import makeDebug from 'debug';
+
 const debug = makeDebug('base-engine');
 
 export default class BaseEngine {
-  constructor (service, options = {}) {
+  constructor(service, options = {}) {
     debug('constructor entered');
 
     this._service = service;
@@ -15,14 +16,14 @@ export default class BaseEngine {
     this._eventEmitter = new EventEmitter();
 
     this._listener = eventName => remoteRecord => this._mutateStore(
-      eventName, remoteRecord, 0
+      eventName, remoteRecord, 0,
     );
 
     this._eventListeners = {
       created: this._listener('created'),
       updated: this._listener('updated'),
       patched: this._listener('patched'),
-      removed: this._listener('removed')
+      removed: this._listener('removed'),
     };
 
     this.useUuid = options.uuid;
@@ -32,11 +33,11 @@ export default class BaseEngine {
 
     this.store = {
       last: { eventName: '', action: '', record: {} },
-      records: []
+      records: [],
     };
   }
 
-  snapshot (records) {
+  snapshot(records) {
     debug('snapshot entered');
 
     this.store.last = { action: 'snapshot' };
@@ -50,7 +51,7 @@ export default class BaseEngine {
     this._subscriber(this.store.records, this.store.last);
   }
 
-  addListeners () {
+  addListeners() {
     debug('addListeners entered');
     const service = this._service;
     const eventListeners = this._eventListeners;
@@ -65,7 +66,7 @@ export default class BaseEngine {
     this._subscriber(this.store.records, { action: 'add-listeners' });
   }
 
-  removeListeners () {
+  removeListeners() {
     debug('removeListeners entered');
 
     if (this.listening) {
@@ -83,7 +84,7 @@ export default class BaseEngine {
     }
   }
 
-  _mutateStore (eventName, remoteRecord, source) {
+  _mutateStore(eventName, remoteRecord, source) {
     debug(`_mutateStore started: ${eventName}`);
     const that = this;
 
@@ -120,7 +121,7 @@ export default class BaseEngine {
 
     return broadcast('mutated');
 
-    function broadcast (action) {
+    function broadcast(action) {
       debug(`emitted ${index} ${eventName} ${action}`);
       store.last = { source, action, eventName, record: remoteRecord };
 
@@ -129,7 +130,7 @@ export default class BaseEngine {
     }
   }
 
-  changeSort (sort) {
+  changeSort(sort) {
     this._sorter = sort;
 
     if (this._sorter) {
@@ -140,7 +141,7 @@ export default class BaseEngine {
     this._subscriber(this.store.records, { action: 'change-sort' });
   }
 
-  _findIndex (array, predicate = () => true, fromIndex = 0) {
+  _findIndex(array, predicate = () => true, fromIndex = 0) {
     for (let i = fromIndex, len = array.length; i < len; i++) {
       if (predicate(array[i])) {
         return i;

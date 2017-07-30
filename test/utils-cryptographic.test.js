@@ -22,7 +22,7 @@ describe('utils-cryptographic:', () => {
   it('hashOfRecord ignores id and _id', () => {
     assert.equal(
       hashOfRecord({ id: 1, _id: 2, a: 3 }),
-      hashOfRecord({ a: 3 })
+      hashOfRecord({ a: 3 }),
     );
   });
 

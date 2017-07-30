@@ -7,13 +7,13 @@ const hooks = require('feathers-hooks');
 const sampleLen = 5;
 let app;
 
-function services1 () {
+function services1() {
   const app = this;
 
   app.configure(fromServiceNonPaginatedConfig);
 }
 
-function fromServiceNonPaginatedConfig () {
+function fromServiceNonPaginatedConfig() {
   const app = this;
 
   app.use('/from', memory({}));
@@ -39,12 +39,10 @@ export default function (Replicator, desc, useUuid) {
     });
 
     describe('cryptographic', () => {
-      beforeEach(() => {
-        return fromService.create(clone(data))
-          .then(() => {
-            replicator = new Replicator(fromService, { sort: Replicator.sort('order'), useUuid });
-          });
-      });
+      beforeEach(() => fromService.create(clone(data))
+        .then(() => {
+          replicator = new Replicator(fromService, { sort: Replicator.sort('order'), useUuid });
+        }));
 
       it('defaults to short uuid', () => {
         const uuid = replicator.getUuid();
@@ -74,6 +72,6 @@ export default function (Replicator, desc, useUuid) {
 
 // Helpers
 
-function clone (obj) {
+function clone(obj) {
   return JSON.parse(JSON.stringify(obj));
 }

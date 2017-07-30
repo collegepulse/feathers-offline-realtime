@@ -11,27 +11,27 @@ let data;
 let fromService;
 let fromServicePaginated;
 
-function services1 () {
+function services1() {
   const app = this;
 
   app.configure(fromServiceNonPaginatedConfig);
   app.configure(fromServicePaginatedConfig);
 }
 
-function fromServiceNonPaginatedConfig () {
+function fromServiceNonPaginatedConfig() {
   const app = this;
 
   app.use('/from', memory({}));
 }
 
-function fromServicePaginatedConfig () {
+function fromServicePaginatedConfig() {
   const app = this;
 
   app.use('/frompaginated', memory({
     paginate: {
       default: 2,
-      max: 3
-    }
+      max: 3,
+    },
   }));
 }
 
@@ -48,35 +48,35 @@ export default function (Replicator, desc) {
           { id: 'q', order: 5 },
           { id: 'a', order: 9 },
           { id: 'z', order: 1 },
-          { id: 'q', order: 3 }
+          { id: 'q', order: 3 },
         ];
 
         dataOrder = [
           { id: 'z', order: 1 },
           { id: 'q', order: 3 },
           { id: 'q', order: 5 },
-          { id: 'a', order: 9 }
+          { id: 'a', order: 9 },
         ];
 
         dataId = [
           { id: 'a', order: 9 },
           { id: 'q', order: 5 },
           { id: 'q', order: 3 },
-          { id: 'z', order: 1 }
+          { id: 'z', order: 1 },
         ];
 
         dataIdOrder = [
           { id: 'a', order: 9 },
           { id: 'q', order: 3 },
           { id: 'q', order: 5 },
-          { id: 'z', order: 1 }
+          { id: 'z', order: 1 },
         ];
 
         dataIdXOrder = [
           { id: 'z', order: 1 },
           { id: 'q', order: 3 },
           { id: 'q', order: 5 },
-          { id: 'a', order: 9 }
+          { id: 'a', order: 9 },
         ];
       });
 
@@ -113,7 +113,7 @@ export default function (Replicator, desc) {
 
         return Promise.all([
           fromService.create(data),
-          fromServicePaginated.create(data)
+          fromServicePaginated.create(data),
         ]);
       });
 
@@ -176,7 +176,7 @@ export default function (Replicator, desc) {
         const query = { order: { $lt: 15 } };
         const publication = record => record.order < 10;
         const replicator = new Replicator(fromService, {
-          query, publication, sort: Replicator.sort('order')
+          query, publication, sort: Replicator.sort('order'),
         });
 
         return replicator.connect()
@@ -192,7 +192,7 @@ export default function (Replicator, desc) {
         const query = { order: { $lt: 15 } };
         const publication = record => record.order < 10;
         const replicator = new Replicator(fromService, {
-          query, publication, sort: Replicator.sort('order')
+          query, publication, sort: Replicator.sort('order'),
         });
 
         return replicator.connect()
@@ -203,7 +203,7 @@ export default function (Replicator, desc) {
             assert.lengthOf(records, 10);
 
             assert.deepEqual(records, data.slice(0, 10).sort(
-              (a, b) => a.id > b.id ? -1 : (a.id < b.id ? 1 : 0)
+              (a, b) => (a.id > b.id ? -1 : (a.id < b.id ? 1 : 0)),
             ));
           });
       });

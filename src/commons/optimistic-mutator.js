@@ -8,7 +8,7 @@ import filter from 'feathers-query-filters';
 import { sorter, matcher, select, _ } from 'feathers-commons';
 
 class Service {
-  constructor (options = {}) {
+  constructor(options = {}) {
     this._replicator = options.replicator;
     this._engine = this._replicator.engine;
 
@@ -24,13 +24,13 @@ class Service {
     this.paginate = options.paginate || {};
   }
 
-  extend (obj) {
+  extend(obj) {
     return Proto.extend(obj, this);
   }
 
   // Find without hooks and mixins that can be used internally and always returns
   // a pagination object
-  _find (params, getFilter = filter) {
+  _find(params, getFilter = filter) {
     const { query, filters } = getFilter(params.query || {});
     let values = _.values(this.store.records).filter(matcher(query));
 
@@ -56,11 +56,11 @@ class Service {
       total,
       limit: filters.$limit,
       skip: filters.$skip || 0,
-      data: values
+      data: values,
     });
   }
 
-  find (params) {
+  find(params) {
     const paginate = typeof params.paginate !== 'undefined' ? params.paginate : this.paginate;
     // Call the internal find with query parameter that include pagination
     const result = this._find(params, query => filter(query, paginate));
@@ -72,7 +72,7 @@ class Service {
     return result;
   }
 
-  get (uuid, params) {
+  get(uuid, params) {
     const records = this.store.records;
     const index = findUuidIndex(records, uuid);
 
@@ -85,7 +85,7 @@ class Service {
   }
 
   // Create without hooks and mixins that can be used internally
-  _create (data, params) {
+  _create(data, params) {
     this._checkConnected();
 
     if (!('uuid' in data)) {
@@ -111,7 +111,7 @@ class Service {
       .then(select(params, ...this._alwaysSelect));
   }
 
-  create (data, params) {
+  create(data, params) {
     if (Array.isArray(data)) {
       return Promise.all(data.map(current => this._create(current)));
     }
@@ -120,7 +120,7 @@ class Service {
   }
 
   // Update without hooks and mixins that can be used internally
-  _update (uuid, data, params) {
+  _update(uuid, data, params) {
     this._checkConnected();
     checkUuidExists(data);
 
@@ -148,10 +148,10 @@ class Service {
       .then(select(params, ...this._alwaysSelect));
   }
 
-  update (uuid, data, params) {
+  update(uuid, data, params) {
     if (uuid === null || Array.isArray(data)) {
       return Promise.reject(new errors.BadRequest(
-        `You can not replace multiple instances. Did you mean 'patch'?`
+        'You can not replace multiple instances. Did you mean \'patch\'?',
       ));
     }
 
@@ -159,7 +159,7 @@ class Service {
   }
 
   // Patch without hooks and mixins that can be used internally
-  _patch (uuid, data, params) {
+  _patch(uuid, data, params) {
     this._checkConnected();
 
     const records = this.store.records;
@@ -183,20 +183,18 @@ class Service {
       .then(select(params, ...this._alwaysSelect));
   }
 
-  patch (uuid, data, params) {
+  patch(uuid, data, params) {
     if (uuid === null) {
-      return this._find(params).then(page => {
-        return Promise.all(page.data.map(
-          current => this._patch(current.uuid, data, params))
-        );
-      });
+      return this._find(params).then(page => Promise.all(page.data.map(
+        current => this._patch(current.uuid, data, params)),
+      ));
     }
 
     return this._patch(uuid, data, params);
   }
 
   // Remove without hooks and mixins that can be used internally
-  _remove (uuid, params) {
+  _remove(uuid, params) {
     this._checkConnected();
 
     const records = this.store.records;
@@ -219,26 +217,26 @@ class Service {
       .then(select(params, ...this._alwaysSelect));
   }
 
-  remove (uuid, params) {
+  remove(uuid, params) {
     if (uuid === null) {
       return this._find(params).then(page =>
         Promise.all(page.data.map(current =>
-          this._remove(current.uuid, params
-          )
+          this._remove(current.uuid, params,
+          ),
         )));
     }
 
     return this._remove(uuid, params);
   }
 
-  _checkConnected () {
+  _checkConnected() {
     if (!this._replicator.connected) {
       throw new errors.BadRequest('Replicator not connected to remote. (offline)');
     }
   }
 }
 
-export default function init (options) {
+export default function init(options) {
   return new Service(options);
 }
 
@@ -246,7 +244,7 @@ init.Service = Service;
 
 // Helpers
 
-function findUuidIndex (array, uuid) {
+function findUuidIndex(array, uuid) {
   for (let i = 0, len = array.length; i < len; i++) {
     if (array[i].uuid == uuid) { // eslint-disable-line
       return i;
@@ -256,16 +254,16 @@ function findUuidIndex (array, uuid) {
   return -1;
 }
 
-function checkUuidExists (record) {
+function checkUuidExists(record) {
   if (!('uuid' in record)) {
     throw new errors.BadRequest('Optimistic mutation requires uuid. (offline)');
   }
 }
 
-function getId (record) {
+function getId(record) {
   return ('id' in record ? record.id : record._id);
 }
 
-function shallowClone (obj) {
+function shallowClone(obj) {
   return Object.assign({}, obj);
 }

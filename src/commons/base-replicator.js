@@ -3,10 +3,11 @@ import snapshot from 'feathers-offline-snapshot';
 import { genUuid } from './utils';
 
 import makeDebug from 'debug';
+
 const debug = makeDebug('base-replicator');
 
 export default class BaseReplicator {
-  constructor (service, options = {}) {
+  constructor(service, options = {}) {
     debug('constructor entered');
 
     // Higher order class defines: this.engine, this.store, this.changeSort, this.on
@@ -18,15 +19,15 @@ export default class BaseReplicator {
     this.genShortUuid = true;
   }
 
-  get connected () {
+  get connected() {
     return this.engine.listening;
   }
 
-  connect () {
+  connect() {
     this.engine.removeListeners();
 
     return snapshot(this._service, this._query)
-      .then(records => {
+      .then((records) => {
         records = this._publication ? records.filter(this._publication) : records;
         records = this.engine.sorter ? records.sort(this.engine.sorter) : records;
 
@@ -35,25 +36,25 @@ export default class BaseReplicator {
       });
   }
 
-  disconnect () {
+  disconnect() {
     this.engine.removeListeners();
   }
 
-  useShortUuid (ifShortUuid) {
+  useShortUuid(ifShortUuid) {
     this.genShortUuid = !!ifShortUuid;
   }
 
-  getUuid () {
+  getUuid() {
     return genUuid(this.genShortUuid);
   }
 
   // array.sort(Realtime.sort('fieldName'));
-  static sort (prop) {
-    return (a, b) => a[prop] > b[prop] ? 1 : (a[prop] < b[prop] ? -1 : 0);
+  static sort(prop) {
+    return (a, b) => (a[prop] > b[prop] ? 1 : (a[prop] < b[prop] ? -1 : 0));
   }
 
   // array.sort(Realtime.multiSort({ field1: 1, field2: -1 }))
-  static multiSort (order) {
+  static multiSort(order) {
     const props = Object.keys(order);
     const len = props.length;
 
