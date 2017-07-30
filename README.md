@@ -1,17 +1,14 @@
-# feathers-offline-realtime
+# feathers-offline-realtime-immutable
 
-[![Build Status](https://travis-ci.org/feathersjs/feathers-offline-realtime.png?branch=master)](https://travis-ci.org/feathersjs/feathers-offline-realtime)
-[![Code Climate](https://codeclimate.com/github/feathersjs/feathers-offline-realtime/badges/gpa.svg)](https://codeclimate.com/github/feathersjs/feathers-offline-realtime)
-[![Test Coverage](https://codeclimate.com/github/feathersjs/feathers-offline-realtime/badges/coverage.svg)](https://codeclimate.com/github/feathersjs/feathers-offline-realtime/coverage)
-[![Dependency Status](https://img.shields.io/david/feathersjs/feathers-offline-realtime.svg?style=flat-square)](https://david-dm.org/feathersjs/feathers-offline-realtime)
-[![Download Status](https://img.shields.io/npm/dm/feathers-offline-realtime.svg?style=flat-square)](https://www.npmjs.com/package/feathers-offline-realtime)
+[![Build Status](https://travis-ci.org/collegepulse/feathers-offline-realtime-immutable.svg?branch=master)](https://travis-ci.org/collegepulse/feathers-offline-realtime-immutable)
+[![Coverage Status](https://coveralls.io/repos/github/collegepulse/feathers-offline-realtime-immutable/badge.svg?branch=master)](https://coveralls.io/github/collegepulse/feathers-offline-realtime-immutable?branch=master)
 
 > Offline-first realtime replication with optimistic updates.
 
 ## Installation
 
 ```
-npm install feathers-offline-realtime --save
+npm install feathers-offline-realtime-immutable --save
 ```
 
 
