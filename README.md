@@ -11,6 +11,22 @@
 npm install feathers-offline-realtime-immutable --save
 ```
 
+## Usage
+
+```
+const Realtime = require('feathers-offline-realtime-immutable');
+const feathersClient = feathers()...;
+const messages = feathersClient.service('/messages');
+
+const messagesRealtime = new Realtime(messages, { subscriber: (records, last) => {
+  /**
+   * Store the records in your state manager. For example, if integrating with redux:
+   *
+   * store.dispatch(services.messages.store({ connected: messagesRealtime.connected, last, records }));
+   *
+   */
+}});
+```
 
 ## Documentation
 
